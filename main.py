@@ -44,8 +44,12 @@ def PEREHOD_UROVNEI():
         TungTungsahur.rect.y = 150
         PORTAL.rect.y = 480
         PORTAL.rect.x = 320
-
-
+        while colision(LOBERINT, CAPEBARA_DaMexx_77):
+            CAPEBARA_DaMexx_77.set_random()
+        while colision(LOBERINT, CAPEBARA_DaMexx_77_1):
+            CAPEBARA_DaMexx_77_1.set_random()
+        while colision(LOBERINT, CAPEBARA_DaMexx_77_2):
+            CAPEBARA_DaMexx_77_2.set_random()
 def takebody():
     if GLEB_SAHUR.TungTungSaur_BODY == False:
         if colision(GLEB_SAHUR, TungTungsahur):

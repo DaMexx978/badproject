@@ -49,6 +49,9 @@ class CAPEBARA_EVIL(PARENTS):
         elif self.direction == "down":
             self.rect.centerx -= step_back
 
+    def set_random(self):
+        self.rect.x = random.randint(0, 800)
+        self.rect.y = random.randint(0, 600)
     def CAPEBARA_MOVMENT(self):
         try:
             if self.new_direction == True:

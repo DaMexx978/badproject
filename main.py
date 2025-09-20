@@ -15,14 +15,16 @@ def minuse_jizn():
 
 
 def concretnaya_Capebara(Capebara):
-    global Start_Time_invinceble
+    global Start_Time_invinceble, GAME_MODE
     if colision(GLEB_SAHUR, Capebara) and GLEB_SAHUR.invinceble == False:
         Capebara_Stats.Lives -= 1
         Capebara_Stats.textLives = Capebara_Stats.font.render(f"Lives {Capebara_Stats.Lives}", True, (153, 247, 164))
+        if Capebara_Stats.Lives == 0:
+            GAME_MODE = "game_lose"
         GLEB_SAHUR.invinceble = True
         Start_Time_invinceble = datetime.now()
     if GLEB_SAHUR.invinceble == True:
-        if datetime.now().second - Start_Time_invinceble.second > 3 or datetime.now().min > Start_Time_invinceble.min:
+        if datetime.now().second - Start_Time_invinceble.second > 2 or datetime.now().min > Start_Time_invinceble.min:
             GLEB_SAHUR.invinceble = False
 
 
@@ -30,26 +32,30 @@ def concretnaya_Capebara(Capebara):
 
 
 def PEREHOD_UROVNEI():
+    global GAME_MODE
     if GLEB_SAHUR.TungTungSaur_BODY == True and colision(GLEB_SAHUR, PORTAL):
-        LOBERINT.image = pygame.image.load("LOBERINT_2.png")
-        Capebara_Stats.Lvl = 2
-        Capebara_Stats.textlvl = Capebara_Stats.font.render(f"Lvl {Capebara_Stats.Lvl}", True, (153, 247, 164))
-        GLEB_SAHUR.TungTungSaur_BODY = False
-        GLEB_SAHUR.rect.x = 40
-        GLEB_SAHUR.rect.y = 2
-        GLEB_SAHUR.x = GLEB_SAHUR.rect.x
-        GLEB_SAHUR.y = GLEB_SAHUR.rect.y
-        TungTungsahur.show = True
-        TungTungsahur.rect.x = 30
-        TungTungsahur.rect.y = 150
-        PORTAL.rect.y = 480
-        PORTAL.rect.x = 320
-        while colision(LOBERINT, CAPEBARA_DaMexx_77):
-            CAPEBARA_DaMexx_77.set_random()
-        while colision(LOBERINT, CAPEBARA_DaMexx_77_1):
-            CAPEBARA_DaMexx_77_1.set_random()
-        while colision(LOBERINT, CAPEBARA_DaMexx_77_2):
-            CAPEBARA_DaMexx_77_2.set_random()
+        if Capebara_Stats.Lvl == 1:
+            LOBERINT.image = pygame.image.load("LOBERINT_2.png")
+            Capebara_Stats.Lvl = 2
+            Capebara_Stats.textlvl = Capebara_Stats.font.render(f"Lvl {Capebara_Stats.Lvl}", True, (153, 247, 164))
+            GLEB_SAHUR.TungTungSaur_BODY = False
+            GLEB_SAHUR.rect.x = 40
+            GLEB_SAHUR.rect.y = 2
+            GLEB_SAHUR.x = GLEB_SAHUR.rect.x
+            GLEB_SAHUR.y = GLEB_SAHUR.rect.y
+            TungTungsahur.show = True
+            TungTungsahur.rect.x = 30
+            TungTungsahur.rect.y = 150
+            PORTAL.rect.y = 480
+            PORTAL.rect.x = 320
+            while colision(LOBERINT, CAPEBARA_DaMexx_77):
+                CAPEBARA_DaMexx_77.set_random()
+            while colision(LOBERINT, CAPEBARA_DaMexx_77_1):
+                CAPEBARA_DaMexx_77_1.set_random()
+            while colision(LOBERINT, CAPEBARA_DaMexx_77_2):
+                CAPEBARA_DaMexx_77_2.set_random()
+        elif Capebara_Stats.Lvl == 2:
+            GAME_MODE = "game_won"
 def takebody():
     if GLEB_SAHUR.TungTungSaur_BODY == False:
         if colision(GLEB_SAHUR, TungTungsahur):
@@ -99,6 +105,7 @@ CAPEBARA_DaMexx_77_2 = CAPEBARA_EVIL(WINDOWS, "CAPEBARA_right.png", "CAPEBARA_le
 set_random_position(CAPEBARA_DaMexx_77_2)
 PORTAL = PORTALS(WINDOWS, "PORTAL.png")
 Capebara_Stats = GAME_STATS(WINDOWS)
+GAME_MODE = "game"
 while 1 == 1:
     WINDOWS.fill(color= (150,150,150))
     for sobitee in pygame.event.get():
@@ -125,40 +132,41 @@ while 1 == 1:
                 GLEB_SAHUR.Movement_right = False
 
 
+    if GAME_MODE == "game":
+        GLEB_SAHUR.show_drawing()
+        LOBERINT.show_drawing()
+        if TungTungsahur.show == True:
+            TungTungsahur.show_drawing()
+        if PORTAL.show == True:
+            PORTAL.show_drawing()
+        GLEB_SAHUR.MOVEMENT()
+        colision_on()
+        takebody()
+        PEREHOD_UROVNEI()
 
-    GLEB_SAHUR.show_drawing()
-    LOBERINT.show_drawing()
-    if TungTungsahur.show == True:
-        TungTungsahur.show_drawing()
-    if PORTAL.show == True:
-        PORTAL.show_drawing()
-    GLEB_SAHUR.MOVEMENT()
-    colision_on()
-    takebody()
-    PEREHOD_UROVNEI()
+        CAPEBARA_DaMexx_77.CAPEBARA_MOVMENT()
+        if colision(CAPEBARA_DaMexx_77, LOBERINT) == True:
+            CAPEBARA_DaMexx_77.new_direction = True
+            CAPEBARA_DaMexx_77.Capebara_back_stab()
+        CAPEBARA_DaMexx_77.show_drawing()
 
-    CAPEBARA_DaMexx_77.CAPEBARA_MOVMENT()
-    if colision(CAPEBARA_DaMexx_77, LOBERINT) == True:
-        CAPEBARA_DaMexx_77.new_direction = True
-        CAPEBARA_DaMexx_77.Capebara_back_stab()
-    CAPEBARA_DaMexx_77.show_drawing()
+        CAPEBARA_DaMexx_77_1.CAPEBARA_MOVMENT()
+        if colision(CAPEBARA_DaMexx_77_1, LOBERINT) == True:
+            CAPEBARA_DaMexx_77_1.new_direction = True
+            CAPEBARA_DaMexx_77_1.Capebara_back_stab()
+        CAPEBARA_DaMexx_77_1.show_drawing()
 
-    CAPEBARA_DaMexx_77_1.CAPEBARA_MOVMENT()
-    if colision(CAPEBARA_DaMexx_77_1, LOBERINT) == True:
-        CAPEBARA_DaMexx_77_1.new_direction = True
-        CAPEBARA_DaMexx_77_1.Capebara_back_stab()
-    CAPEBARA_DaMexx_77_1.show_drawing()
+        CAPEBARA_DaMexx_77_2.CAPEBARA_MOVMENT()
+        if colision(CAPEBARA_DaMexx_77_2, LOBERINT) == True:
+            CAPEBARA_DaMexx_77_2.new_direction = True
+            CAPEBARA_DaMexx_77_2.Capebara_back_stab()
+        CAPEBARA_DaMexx_77_2.show_drawing()
+        Capebara_Stats.show_drawing()
 
-    CAPEBARA_DaMexx_77_2.CAPEBARA_MOVMENT()
-    if colision(CAPEBARA_DaMexx_77_2, LOBERINT) == True:
-        CAPEBARA_DaMexx_77_2.new_direction = True
-        CAPEBARA_DaMexx_77_2.Capebara_back_stab()
-    CAPEBARA_DaMexx_77_2.show_drawing()
-    Capebara_Stats.show_drawing()
-
-    minuse_jizn()
-
-
-
+        minuse_jizn()
+    elif GAME_MODE == "game_won":
+        Capebara_Stats.win_pokazivaet()
+    elif GAME_MODE == "game_lose":
+        Capebara_Stats.lose_pokazivaet()
 
     pygame.display.flip()

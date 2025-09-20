@@ -39,15 +39,15 @@ class CAPEBARA_EVIL(PARENTS):
         self.speed = 1
 
     def Capebara_back_stab(self):
-        step_back = self.speed *2
+        step_back = self.speed *5
         if self.direction == "left":
             self.rect.centerx += step_back
         elif self.direction == "right":
             self.rect.centerx -= step_back
         elif self.direction == "up":
-            self.rect.centerx += step_back
+            self.rect.centery += step_back
         elif self.direction == "down":
-            self.rect.centerx -= step_back
+            self.rect.centery -= step_back
 
     def set_random(self):
         self.rect.x = random.randint(0, 800)
@@ -184,11 +184,31 @@ class GAME_STATS():
         self.rect_textLives = self.textLives.get_rect()
         self.rect_textLives.x = 735
         self.rect_textLives.y = 50
+        self.win_showing()
+        self.lose_showing()
     def show_drawing(self):
         self.screen.blit(self.textlvl, self.rect_textlvl)
 
         self.screen.blit(self.textLives, self.rect_textLives)
+    def win_showing(self):
+        self.font_for_win = pygame.font.SysFont(None, 90)
+        self.text_for_a_win = self.font_for_win.render("YOU WIN", True, (255, 0, 0))
+        self.rectwin = self.text_for_a_win.get_rect()
+        self.rectwin.centerx = 400
+        self.rectwin.centery = 300
 
+    def win_pokazivaet(self):
+        self.screen.blit(self.text_for_a_win, self.rectwin)
+
+    def lose_showing(self):
+        self.font_for_lose = pygame.font.SysFont(None, 90)
+        self.text_for_a_lose = self.font_for_lose.render("YOU LOSE", True, (255, 0, 0))
+        self.rectlose = self.text_for_a_lose.get_rect()
+        self.rectlose.centerx = 400
+        self.rectlose.centery = 300
+
+    def lose_pokazivaet(self):
+        self.screen.blit(self.text_for_a_lose, self.rectlose)
 
 
 

@@ -2,6 +2,8 @@ import random
 
 import pygame
 import sys
+from datetime import datetime
+
 
 class PARENTS():
     def __init__(self, WINDOWS, Name_Image):
@@ -113,10 +115,17 @@ class Main_Character(PARENTS):
         self.y = float(self.rect.y)
         self.TungTungSaur_BODY = False
         self.invinceble = False
-
+        self.step_sound = pygame.mixer.Sound("WALKING SOUNDS.wav")
+        self.WALL_HIT_SOUND = pygame.mixer.Sound("WALL HIT.wav")
+        self.sec_wall_hit = datetime.now().second
+        self.timestepsound = datetime.now()
+        self.soundtungtake = pygame.mixer.Sound("TUNG TUNG TAKE.wav")
 
     def step_back(self):
         step = self.speed
+        if datetime.now().second != self.sec_wall_hit:
+            self.sec_wall_hit = datetime.now().second
+            self.WALL_HIT_SOUND.play()
         if self.Movement_up == True:
             self.y += step
             self.rect.y = self.y
@@ -158,6 +167,12 @@ class Main_Character(PARENTS):
                 return
             self.x += self.speed
             self.rect.x = self.x
+        if self.Movement_up or self.Movement_down or self.Movement_left or self.Movement_right:
+            if datetime.now().microsecond > self.timestepsound.microsecond+500000 \
+                    or datetime.now().second != self.timestepsound.second:
+
+                self.step_sound.play()
+                self.timestepsound = datetime.now()
 
 
 
@@ -186,6 +201,8 @@ class GAME_STATS():
         self.rect_textLives.y = 50
         self.win_showing()
         self.lose_showing()
+        self.minuslifesound = pygame.mixer.Sound("CHARACTER HIT.wav")
+        self.soundportalperehod = pygame.mixer.Sound("PORTAL PEREHOD.wav")
     def show_drawing(self):
         self.screen.blit(self.textlvl, self.rect_textlvl)
 
@@ -199,16 +216,25 @@ class GAME_STATS():
 
     def win_pokazivaet(self):
         self.screen.blit(self.text_for_a_win, self.rectwin)
+        self.screen.blit(self.restartgame, self.restartgamerect)
 
     def lose_showing(self):
         self.font_for_lose = pygame.font.SysFont(None, 90)
+        self.font_for_restart = pygame.font.SysFont(None, 50)
         self.text_for_a_lose = self.font_for_lose.render("YOU LOSE", True, (255, 0, 0))
         self.rectlose = self.text_for_a_lose.get_rect()
         self.rectlose.centerx = 400
         self.rectlose.centery = 300
+        self.restartgame = self.font_for_restart.render("PRESS R TO RESTART", True, (125, 235, 214))
+        self.restartgamerect = self.restartgame.get_rect()
+        self.restartgamerect.centerx = 400
+        self.restartgamerect.centery = 450
+
+
 
     def lose_pokazivaet(self):
         self.screen.blit(self.text_for_a_lose, self.rectlose)
+        self.screen.blit(self.restartgame, self.restartgamerect)
 
 
 

@@ -2,7 +2,7 @@ import random
 import sys
 
 import pygame
-from Classes import Main_Character, THE_LOBERINT, TungTungsahur_BODY, CAPEBARA_EVIL, PORTALS, GAME_STATS
+from Classes import Main_Character, THE_LOBERINT, TungTungsahur_BODY, CAPEBARA_EVIL, PORTALS, GAME_STATS, PARENTS
 from datetime import datetime
 
 Start_Time_invinceble = None
@@ -18,6 +18,7 @@ def concretnaya_Capebara(Capebara):
     global Start_Time_invinceble, GAME_MODE
     if colision(GLEB_SAHUR, Capebara) and GLEB_SAHUR.invinceble == False:
         Capebara_Stats.Lives -= 1
+        Capebara_Stats.minuslifesound.play()
         Capebara_Stats.textLives = Capebara_Stats.font.render(f"Lives {Capebara_Stats.Lives}", True, (153, 247, 164))
         if Capebara_Stats.Lives == 0:
             GAME_MODE = "game_lose"
@@ -48,6 +49,7 @@ def PEREHOD_UROVNEI():
             TungTungsahur.rect.y = 150
             PORTAL.rect.y = 480
             PORTAL.rect.x = 320
+            Capebara_Stats.soundportalperehod.play()
             while colision(LOBERINT, CAPEBARA_DaMexx_77):
                 CAPEBARA_DaMexx_77.set_random()
             while colision(LOBERINT, CAPEBARA_DaMexx_77_1):
@@ -61,6 +63,7 @@ def takebody():
         if colision(GLEB_SAHUR, TungTungsahur):
             GLEB_SAHUR.TungTungSaur_BODY = True
             TungTungsahur.show = False
+            GLEB_SAHUR.soundtungtake.play()
 
 
 def set_random_position(Capebara):
@@ -86,6 +89,25 @@ def colision_on():
     if colision(LOBERINT, GLEB_SAHUR):
         GLEB_SAHUR.step_back()
 
+
+def resetgame():
+    global GLEB_SAHUR, LOBERINT, TungTungsahur_BODY, TungTungsahur, PORTAL, Capebara_Stats
+    GLEB_SAHUR = Main_Character(WINDOWS, "STANDING.png", "WALKING_1.png",
+                                "WALKING_2.png", "WALKING_3.png", "WALKING_4.png", "HAPPY-WIN_ANIMATION.png", 0, 500)
+
+    LOBERINT = THE_LOBERINT(WINDOWS, "THE_LOBERINT!.png")
+
+    TungTungsahur = TungTungsahur_BODY(WINDOWS, "TungTungsahur_BODY.png")
+
+    CAPEBARA_DaMexx_77 = CAPEBARA_EVIL(WINDOWS, "CAPEBARA_right.png", "CAPEBARA_left.png")
+    set_random_position(CAPEBARA_DaMexx_77)
+    CAPEBARA_DaMexx_77_1 = CAPEBARA_EVIL(WINDOWS, "CAPEBARA_right.png", "CAPEBARA_left.png")
+    set_random_position(CAPEBARA_DaMexx_77_1)
+    CAPEBARA_DaMexx_77_2 = CAPEBARA_EVIL(WINDOWS, "CAPEBARA_right.png", "CAPEBARA_left.png")
+    set_random_position(CAPEBARA_DaMexx_77_2)
+    PORTAL = PORTALS(WINDOWS, "PORTAL.png")
+    Capebara_Stats = GAME_STATS(WINDOWS)
+
 pygame.init()
 WINDOWS = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("HELP GLEB TO ESCAPE")
@@ -105,7 +127,8 @@ CAPEBARA_DaMexx_77_2 = CAPEBARA_EVIL(WINDOWS, "CAPEBARA_right.png", "CAPEBARA_le
 set_random_position(CAPEBARA_DaMexx_77_2)
 PORTAL = PORTALS(WINDOWS, "PORTAL.png")
 Capebara_Stats = GAME_STATS(WINDOWS)
-GAME_MODE = "game"
+GAME_MODE = "GLEB START"
+GLEB_ZOSTAVKA = PARENTS(WINDOWS, "GLEB START.png")
 while 1 == 1:
     WINDOWS.fill(color= (150,150,150))
     for sobitee in pygame.event.get():
@@ -165,8 +188,27 @@ while 1 == 1:
 
         minuse_jizn()
     elif GAME_MODE == "game_won":
+        for sobitee in pygame.event.get():
+            if sobitee.type == pygame.KEYDOWN:
+                if sobitee.key == pygame.K_r:
+                    resetgame()
+                    GAME_MODE = "game"
         Capebara_Stats.win_pokazivaet()
     elif GAME_MODE == "game_lose":
         Capebara_Stats.lose_pokazivaet()
+        for sobitee in pygame.event.get():
+            if sobitee.type == pygame.KEYDOWN:
+                if sobitee.key == pygame.K_r:
+                    print("press R")
+                    resetgame()
+                    GAME_MODE = "game"
+
+
+    elif GAME_MODE == "GLEB START":
+        GLEB_ZOSTAVKA.show_drawing()
+        for sobitee in pygame.event.get():
+            if sobitee.type == pygame.KEYDOWN:
+                if sobitee.key == pygame.K_SPACE:
+                    GAME_MODE = "game"
 
     pygame.display.flip()
